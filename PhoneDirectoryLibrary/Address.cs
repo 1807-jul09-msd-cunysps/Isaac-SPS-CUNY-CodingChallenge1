@@ -8,10 +8,10 @@ namespace PhoneDirectoryLibrary
 {
     public struct Address
     {
-        public string street;
-        public string houseNum;
-        public string city;
-        public string zip;
+        public string street { get; set; }
+        public string houseNum { get; set; }
+        public string city { get; set; }
+        public string zip { get; set; }
         public string Pid;
 
         public Address(string street, string houseNum, string city, string zip) : this()

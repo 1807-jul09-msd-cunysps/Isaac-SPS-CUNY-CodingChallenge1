@@ -23,6 +23,11 @@ namespace PhoneDirectoryLibrary
             this.contacts = contacts ?? throw new ArgumentNullException(nameof(contacts));
         }
 
+        public string DataPath()
+        {
+            return dataFilePath;
+        }
+
         public int count()
         {
             return contacts.Count();
@@ -71,19 +76,19 @@ namespace PhoneDirectoryLibrary
             switch (type)
             {
                 case SearchType.firstName:
-                    result = (Contact)contacts.Where(query => (query.firstName).Contains(searchTerm));
+                    result = (Contact)contacts.Where(query => (query.firstName).Contains(searchTerm)).First();
                     break;
                 case SearchType.lastName:
-                    result = (Contact)contacts.Where(query => (query.lastName).Contains(searchTerm));
+                    result = (Contact)contacts.Where(query => (query.lastName).Contains(searchTerm)).First();
                     break;
                 case SearchType.zip:
-                    result = (Contact)contacts.Where(query => (query.address.zip).Contains(searchTerm));
+                    result = (Contact)contacts.Where(query => (query.address.zip).Contains(searchTerm)).First();
                     break;
                 case SearchType.city:
-                    result = (Contact)contacts.Where(query => (query.address.city).Contains(searchTerm));
+                    result = (Contact)contacts.Where(query => (query.address.city).Contains(searchTerm)).First();
                     break;
                 case SearchType.phone:
-                    result = (Contact)contacts.Where(query => (query.phone).Contains(searchTerm));
+                    result = (Contact)contacts.Where(query => (query.phone).Contains(searchTerm)).First();
                     break;
                 default:
                     return null;
@@ -94,10 +99,13 @@ namespace PhoneDirectoryLibrary
 
         public void save()
         {
-            string jsonData = JsonConvert.SerializeObject(this);
-            using(StreamWriter file = new StreamWriter(dataFilePath,false)){
-                file.Write(jsonData);
+            string jsonData = "";
+            foreach(Contact contact in contacts)
+            {
+                jsonData += JsonConvert.SerializeObject(contact,Formatting.Indented);
             }
+
+            File.WriteAllText(DataPath(),jsonData);
         }
 
         public enum SearchType
